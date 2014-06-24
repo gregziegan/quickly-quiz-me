@@ -1,0 +1,1 @@
+[SITE NAME IN activation_email_subject.txt TEMPLATE] - Account Activation

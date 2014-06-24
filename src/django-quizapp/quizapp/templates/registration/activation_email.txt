@@ -1,0 +1,9 @@
+Thank you for joining [activation_email.txt template]!
+
+To activate your account, visit the following link:
+[activation_email.txt template]accounts/activate/{{activation_key}}/
+
+You'll have 7 days before this activation key expires, at which point you'll have to register again.
+
+Thanks,
+The [activation_email.txt template] Team

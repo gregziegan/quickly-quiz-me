@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="row-fluid">
+		<div class="span3">
+		<h1>Registration</h1><br>
+	<form method="post">{% csrf_token %}
+	{{ form }}<br><br>
+	<button class="btn btn-primary" style="margin-left: 0px;" type="submit">Register</button>
+	</div></div>
+{% endblock %}

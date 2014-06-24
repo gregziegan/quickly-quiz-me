@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-header">
+  <h1>Quickly Quiz Me<br><small>Sign in!</small></h1>
+</div>
+<div class="col-md-6 col-md-offset-2">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>Login Portal</h4>
+    </div>
+    <form action="" method="post" role="form">{% csrf_token %}
+      <div class="panel-body">
+        <div class="col-md-9">
+        {% if error %}
+          {{ error }}
+        {% endif %}
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+              <input type="email" name="email" class="form-control" placeholder="Email">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+              <input type="password" name="password" class="form-control" placeholder="Password">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <button type="submit" class="btn btn-primary">Sign In</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
