@@ -28,7 +28,7 @@ class Quiz(models.Model):
 
 
 class QuizUserManager(BaseUserManager):
-    def create_user(self, email, case_id, password=None):
+    def create_user(self, email, username, password=None):
         if not email:
             raise ValueError('Users must have an email address')
 
@@ -41,26 +41,46 @@ class QuizUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, case_id, password):
-        user = self.create_user(email,
+    def create_staff_user(self, email, username, password=None):
+        staff_user = self.create_user(email,
             case_id=case_id,
             password=password,
         )
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
+        staff_user.is_staff = True
+        staff_user.save(using=self._db)
+        return staff_user
+
+
+    def create_superuser(self, email, username, password):
+        superuser = self.create_user(email,
+            case_id=case_id,
+            password=password,
+        )
+        superuser.is_staff = True
+        superuser.is_admin = True
+        superuser.save(using=self._db)
+        return superuser
 
  
 class QuizUser(AbstractBaseUser):
-    case_id = models.CharField(max_length=10)
+    username = models.CharField(max_length=100)
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
         unique=True,
         db_index=True,
     )
+
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    permission_level = models.SmallIntegerField(default=0)
+
+    @property
+    def is_staff(self):
+        return self.permission_level >= 1
+
+    @property
+    def is_admin(self):
+        return self.permission_level == 2
 
     objects = QuizUserManager()
 
@@ -69,7 +89,7 @@ class QuizUser(AbstractBaseUser):
     def __unicode__(self):
         return self.email
 
-class Session(models.Model):
+class QuizSession(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(QuizUser)
     started_at = models.DateTimeField(null=True, blank=True)
@@ -84,7 +104,7 @@ class Question(models.Model):
     content = models.TextField()
     ordinal = models.IntegerField()
     is_deleted = models.BooleanField(default=False)
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(QuizSession)
     answer = models.TextField()
 
     def __unicode__(self):
@@ -97,7 +117,7 @@ class Question(models.Model):
 
 class PlayerAnswer(models.Model):
     content = models.TextField()
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(QuizSession)
     player = models.ForeignKey(QuizUser)
     question = models.ForeignKey(Question)
 

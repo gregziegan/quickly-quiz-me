@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from quizapp.forms import *
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout as auth_logout, login as auth_login
 from django.conf import settings
 from django.contrib.auth.forms import PasswordChangeForm
+
+
+#################################  Registration  #################################
 
 def logout(request):
     auth_logout(request)
@@ -33,9 +36,12 @@ def login(request, template_name='login.html'):
     return render(request, template_name, {'form':form, 'message':message})
 
 
-def index(request, template_name="index.html"):
-    return render(request, template_name, {})
-
+@login_required
+def index(request):
+    if user.is_staff:
+        return redirect(reverse('quizapp.views.admin_dashboard'))
+    else:
+        return redirect(reverse('quizapp.views.quiz_dashboard'))
 
 @login_required
 def change_password(request, template_name='change_password.html'):
@@ -49,3 +55,19 @@ def change_password(request, template_name='change_password.html'):
             message = 'Your password has been changed.'
 
     return render(request, template_name, {'change_password_form':change_password_form, 'message': message})
+
+
+#################################  Quiz Views  #################################
+
+@login_required
+def quiz_dashboard(request, template_name='quiz/dashboard.html'):
+    return render(request, template_name, {})
+
+
+
+#################################  Admin Views  #################################
+
+
+@permission_required('quizuser.is_staff')
+def admin_dashboard(request, template_name='admin/dashboard.html'):
+    return render(request, template_name, {})
