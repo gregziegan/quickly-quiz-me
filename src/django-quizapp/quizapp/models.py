@@ -18,10 +18,14 @@ class Course(models.Model):
 
 class Quiz(models.Model):
     name = models.CharField(max_length=200, unique=True)
+    instructions = models.TextField(default="Answer the following questions to the best of your ability.")
     course = models.ForeignKey(Course)
     created_at = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
     answer_file = models.FileField(upload_to=get_quiz_answer_filepath, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "quizzes"
 
     def __unicode__(self):
         return self.name
@@ -33,7 +37,7 @@ class QuizUserManager(BaseUserManager):
             raise ValueError('Users must have an email address')
 
         user = self.model(
-            case_id=case_id,
+            username=username,
             email=self.normalize_email(email),
         )
 
@@ -43,7 +47,7 @@ class QuizUserManager(BaseUserManager):
 
     def create_staff_user(self, email, username, password=None):
         staff_user = self.create_user(email,
-            case_id=case_id,
+            username=username,
             password=password,
         )
         staff_user.is_staff = True
@@ -53,7 +57,7 @@ class QuizUserManager(BaseUserManager):
 
     def create_superuser(self, email, username, password):
         superuser = self.create_user(email,
-            case_id=case_id,
+            username=username,
             password=password,
         )
         superuser.is_staff = True
@@ -104,8 +108,13 @@ class Question(models.Model):
     content = models.TextField()
     ordinal = models.IntegerField()
     is_deleted = models.BooleanField(default=False)
-    session = models.ForeignKey(QuizSession)
+    quiz = models.ForeignKey(Quiz)
     answer = models.TextField()
+
+
+    class Meta:
+        ordering = ['ordinal']
+
 
     def __unicode__(self):
         content_words = self.content.split()
@@ -116,7 +125,7 @@ class Question(models.Model):
 
 
 class PlayerAnswer(models.Model):
-    content = models.TextField()
+    content = models.TextField(null=True, blank=True)
     session = models.ForeignKey(QuizSession)
     player = models.ForeignKey(QuizUser)
     question = models.ForeignKey(Question)

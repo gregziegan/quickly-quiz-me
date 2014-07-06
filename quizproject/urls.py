@@ -10,9 +10,7 @@ urlpatterns = patterns(
     (r'^admin/', include(admin.site.urls)),
     (r'^', include('quizapp.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
-    (r'^accounts/', include('registration.backends.default.urls')),
-    # Modify and uncomment this line if you have defined additional URLs for your app
-    #(r'^customsubsite/', include('yourappname.urls')),
+    (r'^accounts/', include('quizapp.urls', namespace='accounts')),
 )
 
 if settings.DEBUG:
