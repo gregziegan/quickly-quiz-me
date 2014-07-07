@@ -35,7 +35,7 @@ class QuizSession(models.Model):
     started_at = models.DateTimeField(null=True, blank=True)
     ended_at = models.DateTimeField(null=True, blank=True)
     quiz = models.ForeignKey(Quiz)
-
+    is_private = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['created_at']

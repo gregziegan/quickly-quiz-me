@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
-from quizapp.forms import QuizForm
+from quizapp.forms import QuizForm, QuestionForm, QuizSessionForm
 from quizapp.models import *
 import json
 import logging
@@ -62,9 +62,23 @@ def index(request):
 
 @login_required
 def quiz_dashboard(request, template_name='quiz/dashboard.html'):
-    quiz_sessions = QuizSession.objects.filter(ended_at=None)
+    quiz_sessions = QuizSession.objects.filter(ended_at=None, is_private=False)
     return render(request, template_name, {'quiz_sessions': quiz_sessions})
 
+@login_required
+def create_session(request, template_name='quiz/create_session.html'):
+    
+    form = QuizSessionForm()
+
+    if request.method == 'POST':
+        form = QuizSessionForm(request.POST)
+        if form.is_valid():
+            quiz_session = form.save(commit=False)
+            quiz_session.created_by = request.user
+            quiz_session.save()
+            return redirect(reverse('quizapp.views.quiz_dashboard'))
+
+    return render(request, template_name, {'form':form})
 
 @login_required
 def quiz(request, session_id, template_name='quiz/quiz.html'):

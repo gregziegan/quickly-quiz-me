@@ -2,18 +2,22 @@
 
 {% block content %}
 
-<div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    <table class="table">
-      <thead><tr><td>Quiz Session</td></tr></thead>
-      <tbody>
-        {% for quiz_session in quiz_sessions %}
-        <tr>
-          <td><a href="{% url 'quiz' quiz_session.id %}">{{ quiz_session }}</a></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+<div class="col-md-6 col-md-offset-3 col-sm-12">
+  <div class="page-header">
+    <h1>Quickly Quiz Me!<br><small>Test your knowledge of Matlab</small></h1>
+  </div>
+</div>
+<div class="col-md-4 col-md-offset-4 col-sm-10">
+  <div class="row">
+    <div class="list-group">
+    <a class="list-group-item active" href="{% url 'create_session' %}">Start A New Game! <span class="glyphicon glyphicon-plus"></span></a>
+      {% for quiz_session in quiz_sessions %}
+        <a class="list-group-item" href="{% url 'quiz' quiz_session.id %}">
+          <h4 class="list-group-item-heading">{{ quiz_session }}</h4>
+          <p class="list-group-item-text">Host: {{ quiz_session.created_by }}<br>Created At: {{ quiz_session.created_at }}</p>
+        </a>
+      {% endfor %}
+    </div>
   </div>
 </div>
 
