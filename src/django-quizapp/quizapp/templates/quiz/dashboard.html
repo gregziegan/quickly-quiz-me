@@ -1,6 +1,20 @@
-{% load staticfiles %}
-<p>Quizzes happen here</p>
+{% extends 'quiz/base.html' %}
 
-<script type="text/javascript">
-pageSetUp()
-</script>
+{% block content %}
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <table class="table">
+      <thead><tr><td>Quiz Session</td></tr></thead>
+      <tbody>
+        {% for quiz_session in quiz_sessions %}
+        <tr>
+          <td><a href="{% url 'quiz' quiz_session.id %}">{{ quiz_session }}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

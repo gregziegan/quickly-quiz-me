@@ -3,12 +3,14 @@ from django.shortcuts import *
 from django.conf import settings
 
 manage_patterns = patterns('quizapp.views',
+    url(r'^$', 'manage_index', name="manage_index"),
     url(r'^dashboard/$', 'manage_dashboard', name="manage_dashboard"),
 )
 
 quiz_patterns = patterns('quizapp.views',
     url(r'^dashboard/$', 'quiz_dashboard', name="quiz_dashboard"),
     url(r'^quiz-session/(\d+)/$', 'quiz', name="quiz"),
+    url(r'^quiz-session/(\d+)/auto-save/$', 'quiz'),
 )
 
 urlpatterns = patterns(

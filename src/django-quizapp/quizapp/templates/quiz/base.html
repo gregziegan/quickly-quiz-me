@@ -14,9 +14,10 @@
       {% block content %}
       {% endblock %}
     </div>
-    <script src="{% static 'js/libs/jquery-2.0.2.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
-    <script>
+    <script type="text/javascript" src="{% static 'js/libs/jquery-2.0.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+    <script type="text/javascript">
+    {% include 'quiz/js/ajax_post_boilerplate.js' %}
     {% block javascript %}
     {% endblock %}
     </script>

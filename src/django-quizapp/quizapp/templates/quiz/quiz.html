@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "quiz/base.html" %}
 
 {% block title %}{{ quiz.name }}{% endblock %}
 
@@ -7,7 +7,7 @@
     <h1>{{ quiz.name }}<br><small>{{ candidate }}</small></h1>
 </div>
 
-<div class="col-md-4">
+<div class="col-md-3">
   <div class="row">
     <div class="panel panel-info">
       <div class="panel-heading">
@@ -16,8 +16,8 @@
       <div class="panel-body">
           <a href="#overview" class="list-group-item" onclick="show_overview()"><strong>Overview<span class="glyphicon glyphicon-info-sign pull-right text-info"></span></strong></a>
         <div class="list-group">
-          {% for questions in quiz_questions %}
-          <a class="list-group-item" id="question-nav-{{ question.id }}"><strong>{{ question }}</strong></a>
+          {% for question in quiz_questions %}
+          <a class="list-group-item" id="question-nav-{{ question.id }}" onclick="show_question({{ question.id }})"><strong>{{ question }}</strong></a>
           {% endfor %} 
         </div>
       </div>
@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<div id="overview" class="col-md-8">
+<div id="overview" class="col-md-9">
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3>Question Overview</h3>
@@ -36,7 +36,7 @@
     <div class="panel-body">
         <p class="lead">{{ quiz.instructions|linebreaks }}</p>
       <br>
-      {% for questions in quiz_questions %}
+      {% for question in quiz_questions %}
       <br>
         <p>{{ question.ordinal }}. {{ question.content }}</p>
       <br>
@@ -48,8 +48,8 @@
   </div>
 </div>
 
-{% for questions in quiz_questions %}
-  <div class="col-md-8">
+{% for question in quiz_questions %}
+  <div class="col-md-9">
     <div id="question-{{ question.id }}" class="panel panel-info" style="display: none">
       <div class="panel-heading">
           <h4 class="panel-title">Question: <strong>{{ question.ordinal }}</strong></h4>
@@ -71,5 +71,5 @@
 {% endblock %}
 
 {% block javascript %}
-{% include 'js/quiz.js' %}
+{% include 'quiz/js/quiz.js' %}
 {% endblock %}

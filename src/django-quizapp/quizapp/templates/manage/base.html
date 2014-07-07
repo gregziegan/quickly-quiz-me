@@ -72,8 +72,8 @@
       </div>
       
       <div id="project-context">
-        <span class="label">Projects:</span>
-        <span class="popover-trigger-element dropdrown-toggle" data-toggle="dropdown" id="project-selector">Recent projects</span>
+        <span class="label">Quizzes:</span>
+        <span class="popover-trigger-element dropdrown-toggle" data-toggle="dropdown" id="project-selector">Recent Quizzes</span>
 
         <ul class="dropdown-menu">
           <li>
@@ -144,7 +144,7 @@
         <!-- #SEARCH -->
         <!-- input: search field -->
         <form action="#ajax/search.html" class="header-search pull-right">
-          <input id="search-fld"  type="text" name="param" placeholder="Find reports and more" data-autocomplete='[
+          <input id="search-fld"  type="text" name="param" placeholder="Find quizzes and more..." data-autocomplete='[
           "ActionScript",
           "AppleScript",
           "Asp",
@@ -196,30 +196,30 @@
       <nav>
         <ul>
           <li>
-            <a href="{% url 'admin_dashboard' %}" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+            <a href="{% url 'manage_dashboard' %}" title="Dashboard"><i class="fa fa-lg fa-fw fa-dashboard"></i> <span class="menu-item-parent">Dashboard</span></a>
           </li>
           <li>
-            <a href="#"><i class="fa fa-lg fa-fw fa-tasks"></i> <span class="menu-item-parent">Mission</span></a>
+            <a href="#"><i class="fa fa-lg fa-fw fa-university"></i> <span class="menu-item-parent">Quizzes</span></a>
             <ul>
               <li>
-                <a href="{% url 'quiz_dashboard' %}">Quiz Dashboard</a>
+                <a href="#">Quiz Creation</a>
               </li>
               <li>
-                <a href="#">Create Mission</a>
+                <a href="#">Quiz Editor</a>
               </li>
               <li>
-                <a href="#">All Missions</a>
+                <a href="#">Quiz Timeline</a>
               </li>
             </ul>
           </li>
           <li>
-            <a href="#"><i class="fa fa-lg fa-fw fa-group"></i> <span class="menu-item-parent">Team</span></a>
+            <a href="#"><i class="fa fa-lg fa-fw fa-group"></i> <span class="menu-item-parent">Students</span></a>
             <ul>
               <li>
-                <a href="#">Team Dashboard</a>
+                <a href="#">Course Overview</a>
               </li>
               <li>
-                <a href="#">Employee Directory</a>
+                <a href="#">Student Overview</a>
               </li>
             </ul>
           </li>
@@ -231,10 +231,6 @@
     <!-- MAIN PANEL -->
     <div id="main">
       <div id="ribbon">
-        <span class="ribbon-button-alignment">
-          <span id="refresh" class="btn btn-ribbon" data-action="resetWidgets" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true" data-reset-msg="Would you like to RESET all your saved widgets and clear LocalStorage?"><i class="fa fa-refresh"></i></span>
-        </span>
-
         <!-- breadcrumb -->
         <ol class="breadcrumb">
           <li>Blank Page</li>

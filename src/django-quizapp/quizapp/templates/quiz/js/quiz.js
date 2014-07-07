@@ -1,31 +1,6 @@
 var source = $('body').html()
 
-{% if candidate_exam.exam.time_limit %}
-var time_limit = {{ candidate_exam.exam.time_limit }}; 
-var start_datetime = new Date('{{ candidate_exam.started_at|date:"F d, Y H:i:s" }}');
-var end_by_datetime = new Date(start_datetime.getTime() + time_limit * 60000);
-  {% if candidate_exam.exam.time_limit > 60 %}
-    $('#exam_time').countdown({until: end_by_datetime, layout: '{hn} {hl}, {mn} {ml} Remaining'});
-  {% else %}
-    $('#exam_time').countdown({until: end_by_datetime, layout: '{mn} {ml}, {sn} {sl} Remaining'});
-  {% endif %}
-var absolute_end_by_datetime = new Date(start_datetime.getTime() + time_limit * 2 * 60000);
-var today = new Date()
-{% endif %}
-
-{% if not candidate_exam.exam.requires_answer_file %}
 var errored_posts = 0;
-
-function chevron_swap(section_id) {
-    chevron_span = $('#chevron_span_' + section_id)
-    current_chevron_class = chevron_span.attr('class').split(/\s+/)[1];
-    chevron_span.removeClass(current_chevron_class)
-    if (current_chevron_class == 'glyphicon-chevron-down') {
-        chevron_span.addClass('glyphicon-chevron-up')
-    } else {
-        chevron_span.addClass('glyphicon-chevron-down')
-    }
-}
 
 $(function() {
     var content = $('textarea').val();
@@ -57,7 +32,7 @@ function show_overview() {
     $('#overview').show()
 }
 
-function save_response(answer_element, new_url) {
+function save_response(answer_element) {
     var content = answer_element.val();
     var url_base = location.href.substring(0, location.href.lastIndexOf("/")+1)
     var post_url = url_base + 'auto-save/?question_id=' + /\d+/.exec(answer_element.attr('id'))
@@ -69,15 +44,15 @@ function save_response(answer_element, new_url) {
       success: function(data, testStatus, errorThrown)
       {
           errored_posts = 0;
-          if (new_url) { 
-              window.location.href = new_url;
+          if (new_url) {
+            window.location.replace(new_url)
           }
       },
       error: function(jqXHR, testStatus, errorThrown)
       {
           errored_posts += 1;
           if (errored_posts >= 3) {
-              alert("We are having trouble saving your responses.\nKeep your responses backed up elsewhere and contact screening-help@vertical-knowledge.com");
+              alert("We are having trouble saving your responses.");
               errored_posts = 0;
           }
           console.log('Error saving response');
@@ -116,15 +91,4 @@ function next_question(question_ordinal) {
     var new_question_ordinal = parseInt(question_ordinal) + 1
     $('#question-' + question_ordinal).hide()
     $('#question-' + new_question_ordinal).show()
-}
-{% endif %}
-
-function confirm_submission() {
-    var submit = confirm('Are you sure?\nAnswers will no longer be able to be edited.');
- 
-    console.log(submit)
-    if (submit) {
-        console.log('click')
-        $('#submit_exam_btn').click();
-    }
 }
