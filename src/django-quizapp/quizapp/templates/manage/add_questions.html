@@ -1,0 +1,180 @@
+{% load staticfiles %}
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+    <!-- row -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="container-fluid" id="question-form">
+                <div class="page-header">
+                    <h2><span class="widget-icon"> <i class="fa fa-edit"></i> </span>Question Editor</h2>
+
+                </div>
+
+                <!-- widget div-->
+                <div>
+                    <div class="col-md-6 col-lg-6">
+
+                        <!-- widget content -->
+                        <div class="widget-body">
+                            <div class="row">
+                                <div id="msg" class="alert hide alert-error" style="display: block;"></div>
+                            </div>
+                            {% for question in questions %}
+                            <div class="row">
+                                <table id="mission" class="table table-bordered table-striped" style="clear: both">
+                                    <tbody>
+                                        <tr>
+                                            <td>Question</td>
+                                            <td><a href="form-x-editable.html#" id="question-{{ question.id }}" class="question-form-editable" data-type="text" data-placement="right" data-placeholder="Required" data-original-title="Name This Mission">{{ question.content }}</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ordinal</td>
+                                            <td><a href="form-x-editable.html#" id="description" class="question-form-editable" data-type="textarea" data-placeholder="Please enter a description of the mission." data-original-title="Enter Description">{{ question.ordinal }}</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Answer</td>
+                                            <td><a href="#" id="due-date" class="question-form-editable" data-type="date" data-viewformat="mm/dd/yyyy" data-placement="right" data-original-title="Task Due Date">{{ question.answer }}</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% endfor %}
+                        </div>
+                            <!-- end widget content -->
+
+                    </div>
+                    
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+
+        </article>
+        <!-- END COL -->
+
+    </div>
+    <!-- end row -->
+
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+    /* DO NOT REMOVE : GLOBAL FUNCTIONS!
+     *
+     * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
+     *
+     * // activate tooltips
+     * $("[rel=tooltip]").tooltip();
+     *
+     * // activate popovers
+     * $("[rel=popover]").popover();
+     *
+     * // activate popovers with hover states
+     * $("[rel=popover-hover]").popover({ trigger: "hover" });
+     *
+     * // activate inline charts
+     * runAllCharts();
+     *
+     * // setup widgets
+     * setup_widgets_desktop();
+     *
+     * // run form elements
+     * runAllForms();
+     *
+     ********************************
+     *
+     * pageSetUp() is needed whenever you load a page.
+     * It initializes and checks for all basic elements of the page
+     * and makes rendering easier.
+     *
+     */
+
+    pageSetUp();
+
+    /*
+     * ALL PAGE RELATED SCRIPTS CAN GO BELOW HERE
+     * eg alert("my home function");
+     *
+     * var pagefunction = function() {
+     *   ...
+     * }
+     * loadScript('{% static "js/plugin/_PLUGIN_NAME_.js" %}', pagefunction);
+     *
+     * TO LOAD A SCRIPT:
+     * var pagefunction = function (){
+     *  loadScript(".../plugin.js" %}', run_after_loaded);
+     * }
+     *
+     * OR
+     *
+     * loadScript(".../plugin.js" %}', run_after_loaded);
+     */
+
+    // pagefunction
+    
+    var pagefunction = function() {
+
+         //Maxlength
+        loadScript('{% static "js/plugin/maxlength/bootstrap-maxlength.min.js" %}', runMaxLength);
+    
+        function runMaxLength() {
+            $('input[maxlength]').maxlength({
+                warningClass: "label label-success",
+                limitReachedClass: "label label-important",
+            });
+    
+        }
+    
+        /*
+         * X-Editable
+         */
+    
+        loadScript('{% static "js/plugin/x-editable/moment.min.js" %}', loadMockJax);
+    
+        function loadMockJax() {
+            loadScript('{% static "js/plugin/x-editable/jquery.mockjax.min.js" %}', loadXeditable);
+        }
+    
+        function loadXeditable() {
+            loadScript('{% static "js/plugin/x-editable/x-editable.min.js" %}', loadTypeHead);
+        }
+    
+        function loadTypeHead() {
+            loadScript('{% static "js/plugin/typeahead/typeahead.min.js" %}', loadTypeaheadjs);
+        }
+    
+        function loadTypeaheadjs() {
+            loadScript('{% static "js/plugin/typeahead/typeaheadjs.min.js" %}', runXEdit);
+        }
+    
+        
+        function runXEdit() {
+            
+            //defaults
+            $('.question-form-editable').editable({
+                url: "#",
+                params: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+            });
+
+            $('.question-form-editable').on('save.newquestion', function() {
+                var that = this;
+                setTimeout(function() {
+                    $(that).closest('tr').next().find('.question-form-editable').editable('show');
+                }, 200);
+            });
+
+        }
+
+    }; 
+    
+    pagefunction();
+
+</script>

@@ -202,13 +202,13 @@
             <a href="#"><i class="fa fa-lg fa-fw fa-university"></i> <span class="menu-item-parent">Quizzes</span></a>
             <ul>
               <li>
-                <a href="#">Quiz Creation</a>
+                <a href="{% url 'create_quiz' %}">Quiz Creation</a>
               </li>
               <li>
-                <a href="#">Quiz Editor</a>
+                <a href="{% url 'quiz_selector' %}">Quiz Selector</a>
               </li>
               <li>
-                <a href="#">Quiz Timeline</a>
+                <a href="{% url 'quiz_timeline' %}">Quiz Timeline</a>
               </li>
             </ul>
           </li>
@@ -216,10 +216,10 @@
             <a href="#"><i class="fa fa-lg fa-fw fa-group"></i> <span class="menu-item-parent">Students</span></a>
             <ul>
               <li>
-                <a href="#">Course Overview</a>
+                <a href="{% url 'course_overview' %}">Course Overview</a>
               </li>
               <li>
-                <a href="#">Student Overview</a>
+                <a href="{% url 'student_overview' %}">Student Overview</a>
               </li>
             </ul>
           </li>
@@ -268,7 +268,7 @@
     {% endblock %}
     <!-- PAGE SCRIPTS -->
     <script src="{% static 'js/libs/jquery-2.0.2.min.js' %}"></script>
-    <script src="{% static 'js/libs/jquery-ui-1.10.4.min.js' %}"></script>
+    <script src="{% static 'js/libs/jquery-ui-1.10.3.min.js' %}"></script>
     
     <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/plugin/jquery-touch/jquery.ui.touch-punch.min.js' %}"></script>

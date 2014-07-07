@@ -49,7 +49,7 @@ class Question(models.Model):
     ordinal = models.IntegerField()
     is_deleted = models.BooleanField(default=False)
     quiz = models.ForeignKey(Quiz)
-    answer = models.TextField()
+    answer = models.TextField(null=True, blank=True)
 
 
     class Meta:

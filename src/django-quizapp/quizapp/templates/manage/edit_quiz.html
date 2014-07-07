@@ -1,0 +1,47 @@
+{% load staticfiles %}
+
+
+<div class="col-md-6 col-sm-12">
+  <form id="quiz-form">
+    {{ form.errors }}
+    {{ form.as_p }}
+    <button class="btn btn-primary"{% if quiz %} onclick="edit_quiz()">Edit Quiz{% else %} onclick="create_quiz()">Create Quiz{% endif %}</button>
+  </form>
+</div>
+
+<script type="text/javascript">
+
+pageSetUp()
+
+function create_quiz() {
+    var form = $('#quiz-form')
+    $.ajax({
+        url: "{% url 'create_quiz' %}",
+        method: 'post',
+        data: form.serialize(),
+        success: function (data) {
+            window.location.replace("#/") 
+        },
+        error: function (data) {
+
+        }
+    });
+}
+{% if quiz %}
+function edit_quiz() {
+    var form = $('#quiz-form')
+    $.ajax({
+        url: "{% url 'edit_quiz' quiz.id %}",
+        method: 'post',
+        data: form.serialize(),
+        success: function (data) {
+            window.location.replace("#{% url 'quiz_selector' %}")
+        },
+        error: function (data) {
+            
+        }
+    });
+}
+{% endif %}
+
+</script>

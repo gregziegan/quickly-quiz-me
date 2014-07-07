@@ -6,8 +6,11 @@ from django.conf import settings
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
+from quizapp.forms import QuizForm
 from quizapp.models import *
 import json
+import logging
+logger = logging.getLogger(__name__)
 
 #################################  Registration  #################################
 
@@ -54,6 +57,7 @@ def index(request):
     else:
         return redirect(reverse('quizapp.views.quiz_dashboard'))
 
+
 #################################  Quiz Views  #################################
 
 @login_required
@@ -96,5 +100,54 @@ def manage_index(request, template_name='manage/index.html'):
     return render(request, template_name, {})
 
 @permission_required('user.is_staff')
-def manage_dashboard(request, template_name='manage/dashboard.html'):
+def manage_dashboard(request, template_name='../ajax/dashboard.html'):
     return render(request, template_name, {})
+
+@permission_required('user.is_staff')
+def edit_quiz(request, quiz_id=None, template_name='manage/edit_quiz.html'):
+
+    try:
+        quiz = get_object_or_404(Quiz, id=quiz_id) if quiz_id else None
+
+        if quiz:
+            form = QuizForm(instance=quiz)
+        else:
+            form = QuizForm()
+
+        if request.method == 'POST' and request.is_ajax():
+            logger.info(request.POST)
+            form = QuizForm(request.POST, instance=quiz) if quiz else QuizForm(request.POST)
+            if form.is_valid():
+                q = form.save()
+                return HttpResponse(json.dumps({'quiz_id': q.id}), content_type='application/json')
+            else:
+                return HttpResponse(json.dumps({'message': 'error'}), content_type='application/json')
+
+        return render(request, template_name, {'quiz':quiz, 'form':form})
+    except:
+        import sys, traceback
+        traceback.print_exc(file=sys.stdout)
+
+@permission_required('user.is_staff')
+def add_questions(request, quiz_id, template_name='manage/add_questions.html'):
+    questions = Question.objects.filter(is_deleted=False, quiz__id=quiz_id)
+    return render(request, template_name, {'questions':questions})
+
+@permission_required('user.is_staff')
+def quiz_selector(request, template_name='manage/quiz_selector.html'):
+    quizzes = Quiz.objects.filter(is_deleted=False)
+    return render(request, template_name, {'quizzes':quizzes})
+
+@permission_required('user.is_staff')
+def quiz_timeline(request, template_name='manage/quiz_timeline.html'):
+    return render(request, template_name, {})
+
+@permission_required('user.is_staff')
+def course_overview(request, template_name='manage/course_overview.html'):
+    courses = Course.objects.all()
+    return render(request, template_name, {'courses': courses})
+
+@permission_required('user.is_staff')
+def student_overview(request, template_name='manage/student_overview.html'):
+    students = User.objects.all()
+    return render(request, template_name, {'students': students})

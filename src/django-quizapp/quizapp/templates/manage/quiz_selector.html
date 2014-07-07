@@ -1,0 +1,66 @@
+{% load staticfiles %}
+
+<section id="widget-grid" class="">
+
+    <!-- row -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="container-fluid" id="question-form">
+                <div class="page-header">
+                    <h2><span class="widget-icon"> <i class="fa fa-edit"></i> </span>Quiz Selector</h2>
+
+                </div>
+
+                <!-- widget div-->
+                <div>
+                    <div class="col-md-6 col-lg-6">
+
+                        <!-- widget content -->
+                        <div class="widget-body">
+                            <div class="row">
+                                <div id="msg" class="alert hide alert-error" style="display: block;"></div>
+                            </div>
+                            <table class="table table-condensed table-hover">
+                                <tbody>
+                                {% for quiz in quizzes %}
+                                  <tr>
+                                    <td>
+                                      <p class="text-center"><strong>{{ quiz.name }}</strong></p>
+                                    </td>
+                                    <td>
+                                      <a href="#{% url 'edit_quiz' quiz.id %}" class="btn btn-info btn-block">Edit</a>
+                                    </td>
+                                    <td>
+                                      <a href="#{% url 'add_questions' quiz.id %}" class="btn btn-primary">Add Questions</a>
+                                    </td>
+                                  </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                            <!-- end widget content -->
+
+                    </div>
+                    
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+
+        </article>
+        <!-- END COL -->
+
+    </div>
+    <!-- end row -->
+
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+pageSetUp()
+</script>
