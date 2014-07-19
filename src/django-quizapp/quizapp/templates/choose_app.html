@@ -1,0 +1,19 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="page-header">
+      <h2>Quickly Quiz Me<br><small>A multiplayer quiz platform</small></h2>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 col-md-offset-4">
+    <div class="btn-group">
+      <a type="button" class="btn btn-primary btn-lg" href="{% url 'quiz_dashboard' %}">Quiz Application</a>
+      <a type="button" class="btn btn-info btn-lg" href="{% url 'manage_index' %}">Admin Application</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

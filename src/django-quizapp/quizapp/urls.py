@@ -24,6 +24,7 @@ quiz_patterns = patterns('quizapp.views',
 urlpatterns = patterns(
     'quizapp.views',
     url(r'^$', 'index', name="index"),
+    url(r'^choose-app$', 'choose_app', name="choose_app"),
     url(r'^(?i)login$', 'login', name="login"),
     url(r'^(?i)logout$', 'logout', name="logout"),
     url(r'^(?i)change-password/?$', 'change_password', name="change_password"),

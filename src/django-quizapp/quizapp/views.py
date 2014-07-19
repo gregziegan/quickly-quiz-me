@@ -53,10 +53,13 @@ def change_password(request, template_name='change_password.html'):
 @login_required
 def index(request):
     if request.user.is_staff:
-        return redirect(reverse('quizapp.views.manage_index'))
+        return redirect(reverse('quizapp.views.choose_app'))
     else:
         return redirect(reverse('quizapp.views.quiz_dashboard'))
 
+@permission_required('user.is_staff')
+def choose_app(request, template_name='choose_app.html'):
+    return render(request, template_name, {})
 
 #################################  Quiz Views  #################################
 

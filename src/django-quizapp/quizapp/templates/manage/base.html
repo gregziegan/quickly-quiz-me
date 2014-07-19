@@ -223,6 +223,9 @@
               </li>
             </ul>
           </li>
+          <li>
+            <a href="#" onclick="exit_admin()" title="Go to Quiz Application"><i class="fa fa-lg fa-fw fa-arrow-left"></i> <span class="menu-item-parent">Back to App Selection</span></a>
+          </li>
         </ul>
       </nav>
       <span class="minifyme" data-action="minifyMenu"> <i class="fa fa-arrow-circle-left hit"></i> </span>
@@ -335,6 +338,10 @@
         return cookieValue;
     }
     var csrftoken = getCookie('csrftoken');
+
+    function exit_admin() {
+      window.location.href = "{% url 'choose_app' %}"
+    }
 
     {% block javascript %}
     {% endblock %}
