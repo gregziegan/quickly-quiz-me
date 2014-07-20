@@ -86,29 +86,33 @@ def create_session(request, template_name='quiz/create_session.html'):
 @login_required
 def quiz(request, session_id, template_name='quiz/quiz.html'):
 
-    quiz_session = get_object_or_404(QuizSession, id=session_id)
-    quiz = quiz_session.quiz
-    questions = Question.objects.filter(quiz=quiz)
-    quiz_questions = { question:Choice.objects.filter(question=question) for question in questions }
+    try:
+        quiz_session = get_object_or_404(QuizSession, id=session_id)
+        quiz = quiz_session.quiz
+        questions = Question.objects.filter(quiz=quiz)
+        quiz_questions = { question:Choice.objects.filter(question=question) for question in questions }
 
-    if request.method == 'POST':
-        if request.is_ajax():
-            question_id = int(request.GET['question_id'])
-            answer, created = PlayerAnswer.objects.get_or_create(
-                question=Question.objects.get(id=question_id), 
-                player=request.user,
-                session=quiz_session,
-            )
-            answer.add_answer(request.POST.get('answer'))
-            answer.save()
-            answer_json = json.dumps({ 'answer_id': answer.id, 'answer_content': answer.content })
-            return HttpResponse(answer_json, content_type="application/json")
+        if request.method == 'POST':
+            if request.is_ajax():
+                question_id = int(request.GET['question_id'])
+                answer, created = PlayerAnswer.objects.get_or_create(
+                    question=Question.objects.get(id=question_id), 
+                    player=request.user,
+                    session=quiz_session,
+                )
+                answer.add_answer(request.POST.get('answer'))
+                answer.save()
+                answer_json = json.dumps({ 'answer_id': answer.id, 'answer_content': answer.essay_answer })
+                return HttpResponse(answer_json, content_type="application/json")
 
-    answer_vals = PlayerAnswer.objects.filter(session=quiz_session, player=request.user).values('question', 'essay_answer', 'multiple_choice_answer')
-    answers = { int(answer['question']): {'essay':answer['essay_answer'],'mult_choice':answer['multiple_choice_answer']}  for answer in answer_vals }
-    answers = json.dumps(answers)
+        answer_vals = PlayerAnswer.objects.filter(session=quiz_session, player=request.user).values('question', 'essay_answer', 'multiple_choice_answer')
+        answers = { int(answer['question']): {'essay':answer['essay_answer'],'mult_choice':answer['multiple_choice_answer']}  for answer in answer_vals }
+        answers = json.dumps(answers)
 
-    return render(request, template_name, {'quiz_questions': quiz_questions, 'quiz':quiz, 'answers': answers})
+        return render(request, template_name, {'quiz_questions': quiz_questions, 'quiz':quiz, 'answers': answers})
+    except:
+        import sys, traceback
+        traceback.print_exc(file=sys.stdout)
 
 
 #################################  Management Views  #################################
