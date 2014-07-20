@@ -89,6 +89,7 @@ def quiz(request, session_id, template_name='quiz/quiz.html'):
     quiz_session = get_object_or_404(QuizSession, id=session_id)
     quiz = quiz_session.quiz
     questions = Question.objects.filter(quiz=quiz)
+    question_ids = questions.values_list('id', flat=True)
     quiz_questions = { question:Choice.objects.filter(question=question) for question in questions }
 
     if request.method == 'POST':
@@ -108,7 +109,12 @@ def quiz(request, session_id, template_name='quiz/quiz.html'):
     answers = { int(answer['question']): {'essay':answer['essay_answer'],'mult_choice':answer['multiple_choice_answer']}  for answer in answer_vals }
     answers = json.dumps(answers)
 
-    return render(request, template_name, {'quiz_questions': quiz_questions, 'quiz':quiz, 'answers': answers})
+    return render(request, template_name, 
+        {'quiz_questions': quiz_questions,
+         'quiz': quiz,
+         'question_ids':question_ids,
+         'answers': answers}
+    )
 
 
 #################################  Management Views  #################################

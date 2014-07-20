@@ -48,11 +48,11 @@
   </div>
 </div>
 
+<div class="col-md-9">
 {% for question, choices in quiz_questions.items %}
-  <div class="col-md-9">
     <div id="question-{{ question.id }}" class="panel panel-info" style="display: none">
       <div class="panel-heading">
-          <h4 class="panel-title">Question: <strong>{{ question.ordinal }}</strong></h4>
+        <h4 class="panel-title">Question: <strong>{{ question.ordinal }}</strong></h4>
       </div>
       <div class="panel-body">
           <p>{{ question.content }}</p>
@@ -60,7 +60,7 @@
           {% for choice in choices %}
           <div class="radio">
             <label>
-              <input type="radio" name="question-{{ question.id }}-choice-{{ choice.letter }}" id="question-{{ question.id }}-choice-{{ choice.letter }}" value="{{ choice.letter }}">{{ choice.content }}
+              <input type="radio" class="mult-choice" name="question-{{ question.id }}-choice-{{ choice.letter }}" id="question-{{ question.id }}-choice-{{ choice.letter }}" value="{{ choice.letter }}">{{ choice.letter|upper }}. {{ choice.content }}
             </label>
           </div>
           {% endfor %}
@@ -75,8 +75,8 @@
         {% endif %}
       </div>
     </div>
-  </div>
 {% endfor %}
+</div>
 
 {% endblock %}
 
