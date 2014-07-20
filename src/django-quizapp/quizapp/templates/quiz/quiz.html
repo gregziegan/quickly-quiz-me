@@ -60,7 +60,7 @@
           {% for choice in choices %}
           <div class="radio">
             <label>
-              <input type="radio" class="mult-choice" name="question-{{ question.id }}-choice-{{ choice.letter }}" id="question-{{ question.id }}-choice-{{ choice.letter }}" value="{{ choice.letter }}">{{ choice.letter|upper }}. {{ choice.content|linebreaks }}
+              <input type="radio" class="mult-choice" name="question-{{ question.id }}-choice" id="question-{{ question.id }}-choice-{{ choice.letter }}" value="{{ choice.letter }}">{{ choice.letter|upper }}. <br>{{ choice.content|linebreaks }}
             </label>
           </div>
           {% endfor %}

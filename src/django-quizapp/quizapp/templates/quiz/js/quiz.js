@@ -46,9 +46,6 @@ function save_mult_choice_response(post_url, letter) {
       success: function(data, testStatus, errorThrown)
       {
           errored_posts = 0;
-          if (new_url) {
-            window.location.replace(new_url)
-          }
       },
       error: function(jqXHR, testStatus, errorThrown)
       {
@@ -67,9 +64,6 @@ function save_essay_response(post_url, content) {
       success: function(data, testStatus, errorThrown)
       {
           errored_posts = 0;
-          if (new_url) {
-            window.location.replace(new_url)
-          }
       },
       error: function(jqXHR, testStatus, errorThrown)
       {

@@ -73,6 +73,7 @@ class Choice(models.Model):
     question = models.ForeignKey(Question)
 
     class Meta(object):
+        ordering = ['letter']
         unique_together = ('letter', 'question')
 
     def __unicode__(self):
