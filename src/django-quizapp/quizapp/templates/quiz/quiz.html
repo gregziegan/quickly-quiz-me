@@ -55,12 +55,12 @@
         <h4 class="panel-title">Question: <strong>{{ question.ordinal }}</strong></h4>
       </div>
       <div class="panel-body">
-          <p>{{ question.content }}</p>
+          <p>{{ question.content|linebreaks }}</p>
         {% if question.is_multiple_choice %}
           {% for choice in choices %}
           <div class="radio">
             <label>
-              <input type="radio" class="mult-choice" name="question-{{ question.id }}-choice-{{ choice.letter }}" id="question-{{ question.id }}-choice-{{ choice.letter }}" value="{{ choice.letter }}">{{ choice.letter|upper }}. {{ choice.content }}
+              <input type="radio" class="mult-choice" name="question-{{ question.id }}-choice-{{ choice.letter }}" id="question-{{ question.id }}-choice-{{ choice.letter }}" value="{{ choice.letter }}">{{ choice.letter|upper }}. {{ choice.content|linebreaks }}
             </label>
           </div>
           {% endfor %}
