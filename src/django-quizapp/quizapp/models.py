@@ -69,7 +69,7 @@ class Question(models.Model):
 
 class Choice(models.Model):
     content = models.TextField()
-    letter = models.CharField(max_length=1, null=True, blank=True)
+    letter = models.CharField(max_length=1)
     question = models.ForeignKey(Question)
 
     class Meta(object):
