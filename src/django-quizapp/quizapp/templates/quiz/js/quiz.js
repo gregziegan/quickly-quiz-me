@@ -91,22 +91,31 @@ function save_response(answer_element, is_multiple_choice) {
   
 }
 
+function populate_essay_responses(essay_elements, answers) {
+    if (essay_elements == null) return
+    var essay_id;
+    for (var i = 0; i < essay_elements.length; i++) {
+        essay_id = /\d+/.exec(essay_elements[i]);
+        var answer = answers[essay_id.toString()];
+        $('#response-' + essay_id).val(answer['essay']);
+    }
+}
+
+function populate_multiple_choice_responses(answers) {
+    var question_ids = {{ question_ids|safe }};
+    for (var i = 0; i < question_ids.length; i++) {
+        var question_id = question_ids[i].toString();
+        var answer = answers[question_id];
+        $('#question-' + question_id + '-choice-' + answer['mult_choice']).prop("checked", true)
+    }
+}
+
 $(document).ready(function() {
     var answers = {{ answers|safe }}
     var re = /id="response-\d+/g
-    var responses = source.match(re)
-    var response_id;
-    for (var i = 0; i < responses.length; i++) {
-        response_id = /\d+/.exec(responses[i]);
-        var answer = answers[response_id.toString()];
-        $('#response-' + response_id).val(answer['essay']);
-    }
-    var question_ids = {{ question_ids|safe }};
-    for (var i = 0; i < question_ids.length; i++) {
-      var question_id = question_ids[i].toString();
-      var answer = answers[question_id];
-      $('#question-' + question_id + '-choice-' + answer['mult_choice']).prop("checked", true)
-    }
+    var essay_elements = source.match(re)
+    populate_essay_responses(essay_elements, answers)
+    populate_multiple_choice_responses(answers)
 });
 
 function save_all_responses(new_url) {
