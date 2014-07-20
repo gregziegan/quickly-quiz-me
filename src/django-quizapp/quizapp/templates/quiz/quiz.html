@@ -17,7 +17,7 @@
           <a href="#overview" class="list-group-item" onclick="show_overview()"><strong>Overview<span class="glyphicon glyphicon-info-sign pull-right text-info"></span></strong></a>
         <div class="list-group">
           {% for question in quiz_questions %}
-          <a class="list-group-item" id="question-nav-{{ question.id }}" onclick="show_question({{ question.id }})"><strong>{{ question }}</strong></a>
+          <a class="list-group-item" id="question-nav-{{ question.id }}" onclick="show_question({{ question.id }})"><strong>{{ question.get_content_summary }}</strong></a>
           {% endfor %} 
         </div>
       </div>
@@ -43,12 +43,12 @@
       {% endfor %}
     </div>
     <div class="panel-footer">
-      <p>Use the accordion under 'Questions' to access individual questions.</p>
+      <p>Use the question list under 'Questions' to access individual questions.</p>
     </div>
   </div>
 </div>
 
-{% for question in quiz_questions %}
+{% for question, choices in quiz_questions.items %}
   <div class="col-md-9">
     <div id="question-{{ question.id }}" class="panel panel-info" style="display: none">
       <div class="panel-heading">
@@ -56,7 +56,17 @@
       </div>
       <div class="panel-body">
           <p>{{ question.content }}</p>
+        {% if question.is_multiple_choice %}
+          {% for choice in choices %}
+          <div class="radio">
+            <label>
+              <input type="radio" name="question-{{ question.id }}-choice-{{ choice.letter }}" id="question-{{ question.id }}-choice-{{ choice.letter }}" value="{{ choice.letter }}">{{ choice.content }}
+            </label>
+          </div>
+          {% endfor %}
+        {% else %}
         <textarea id="response-{{ question.id }}" class="form-control" style="resize:vertical;" rows="20"></textarea>
+        {% endif %}
       </div>
       <div class="panel-footer">
         {% if not forloop.parentloop.last or not forloop.last %}

@@ -67,7 +67,9 @@ $(document).ready(function() {
     var response_id;
     for (var i = 0; i < responses.length; i++) {
         response_id = /\d+/.exec(responses[i]);
-        $('#response-' + response_id).val(answers[response_id.toString()]);
+        var answer = answers[response_id.toString()];
+        $('#response-' + response_id).val(answer['essay']);
+        $('#question-' + response_id + '-choice-' + answer['mult_choice']).prop("checked", true)
     }
 });
 

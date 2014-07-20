@@ -43,38 +43,54 @@ class QuizSession(models.Model):
     def __unicode__(self):
         return self.name
 
-
 class Question(models.Model):
     content = models.TextField()
     ordinal = models.IntegerField()
     is_deleted = models.BooleanField(default=False)
     quiz = models.ForeignKey(Quiz)
     answer = models.TextField(null=True, blank=True)
-
+    multiple_choice_answer = models.CharField(max_length=1, null=True, blank=True)
 
     class Meta:
         ordering = ['ordinal']
 
-
-    def __unicode__(self):
+    def get_content_summary(self):
         content_words = self.content.split()
-        if len(content_words) < 7:
+        if len(content_words) < 10:
             return self.content
         else:
             return u'{}...'.format(' '.join(content_words[:7]))
 
+    def is_multiple_choice(self):
+        return True if self.multiple_choice_answer else False
+
+    def __unicode__(self):
+        return u'<Question: {}>'.format(self.get_content_summary())
+
+class Choice(models.Model):
+    content = models.TextField()
+    letter = models.CharField(max_length=1, null=True, blank=True)
+    question = models.ForeignKey(Question)
+
+    class Meta(object):
+        unique_together = ('letter', 'question')
+
+    def __unicode__(self):
+        return u'<Choice: {}>'.format(self.content)
 
 class PlayerAnswer(models.Model):
-    content = models.TextField(null=True, blank=True)
+    essay_answer = models.TextField(null=True, blank=True)
+    multiple_choice_answer = models.CharField(max_length=1, null=True, blank=True)
     session = models.ForeignKey(QuizSession)
     player = models.ForeignKey(User)
     question = models.ForeignKey(Question)
 
-    def __unicode__(self):
-        content_words = self.content.split()
-        if len(content_words) < 7:
-            representation = '{}\'s Answer: {}'.format(self.player, self.content)
+    def add_answer(self, answer):
+        if self.question.is_multiple_choice():
+            self.multiple_choice_answer = answer
         else:
-            representation = '{}\'s Answer: {}'.format(self.player, ' '.join(content_words[:7]))
-        return representation
+            self.essay_answer = answer
+
+    def __unicode__(self):
+        return '<Answer: <Player: {}> {}>'.format(self.player, self.question)
 

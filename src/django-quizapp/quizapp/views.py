@@ -88,7 +88,8 @@ def quiz(request, session_id, template_name='quiz/quiz.html'):
 
     quiz_session = get_object_or_404(QuizSession, id=session_id)
     quiz = quiz_session.quiz
-    quiz_questions = Question.objects.filter(quiz=quiz)
+    questions = Question.objects.filter(quiz=quiz)
+    quiz_questions = { question:Choice.objects.filter(question=question) for question in questions }
 
     if request.method == 'POST':
         if request.is_ajax():
@@ -98,13 +99,13 @@ def quiz(request, session_id, template_name='quiz/quiz.html'):
                 player=request.user,
                 session=quiz_session,
             )
-            answer.content = request.POST.get('answer')
+            answer.add_answer(request.POST.get('answer'))
             answer.save()
             answer_json = json.dumps({ 'answer_id': answer.id, 'answer_content': answer.content })
             return HttpResponse(answer_json, content_type="application/json")
 
-    answers = PlayerAnswer.objects.filter(session=quiz_session, player=request.user).values_list('question', 'content')
-    answers = { int(answer[0]): answer[1] for answer in answers }
+    answer_vals = PlayerAnswer.objects.filter(session=quiz_session, player=request.user).values('question', 'essay_answer', 'multiple_choice_answer')
+    answers = { int(answer['question']): {'essay':answer['essay_answer'],'mult_choice':answer['multiple_choice_answer']}  for answer in answer_vals }
     answers = json.dumps(answers)
 
     return render(request, template_name, {'quiz_questions': quiz_questions, 'quiz':quiz, 'answers': answers})
