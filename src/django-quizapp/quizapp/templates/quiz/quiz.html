@@ -14,7 +14,6 @@
           <h4>Questions</h4>
       </div>
       <div class="panel-body">
-          <a href="#overview" class="list-group-item" onclick="show_overview()"><strong>Overview<span class="glyphicon glyphicon-info-sign pull-right text-info"></span></strong></a>
         <div class="list-group">
           {% for question in quiz_questions %}
           <a class="list-group-item" id="question-nav-{{ question.id }}" onclick="show_question({{ question.id }})"><strong>{{ question.get_content_summary }}</strong></a>
@@ -24,37 +23,17 @@
       </div>
     </div>
   </div>
-          <form role="form" method="post" action="{% url 'quiz' session.id %}">{% csrf_token %}
-            <button id="submit-quiz" class="hidden" type="submit">submit quiz</button>
-          </form>
+  <form role="form" method="post" action="{% url 'quiz' session.id %}">{% csrf_token %}
+    <button id="submit-quiz" class="hidden" type="submit">submit quiz</button>
+  </form>
   <div class="row">
       <a href="{% url 'quiz_dashboard' %}" class="btn btn-info btn-block">Back Home</a>
   </div>
 </div>
 
-<div id="overview" class="col-md-9">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3>Question Overview</h3>
-    </div>
-    <div class="panel-body">
-        <p class="lead">{{ quiz.instructions|linebreaks }}</p>
-      <br>
-      {% for question in quiz_questions %}
-      <br>
-        <p>{{ question.ordinal }}. {{ question.content|linebreaks }}</p>
-      <br>
-      {% endfor %}
-    </div>
-    <div class="panel-footer">
-      <p>Use the question list under 'Questions' to access individual questions.</p>
-    </div>
-  </div>
-</div>
-
 <div class="col-md-9">
 {% for question, choices in quiz_questions.items %}
-    <div id="question-{{ question.id }}" class="panel panel-info" style="display: none">
+    <div id="question-{{ question.id }}" name="question-ordinal-{{ question.ordinal }}" class="panel panel-info" style="display: none">
       <div class="panel-heading">
         <h4 class="panel-title">Question: <strong>{{ question.ordinal }}</strong></h4>
       </div>

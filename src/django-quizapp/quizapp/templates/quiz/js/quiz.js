@@ -19,7 +19,6 @@ $(function() {
 });
 
 function show_question(question_id) {
-    $('#overview').hide()
     hide_questions()
     $('#question-' + question_id).show()
 }
@@ -30,11 +29,6 @@ function hide_questions() {
     for (var i = 0; i < questions.length; i++) {
         $('#question-' + /\d+/.exec(questions[i])).hide()
     }
-}
-
-function show_overview() {
-    hide_questions()
-    $('#overview').show()
 }
 
 function save_mult_choice_response(post_url, letter) {
@@ -116,6 +110,7 @@ $(document).ready(function() {
     var essay_elements = source.match(re)
     populate_essay_responses(essay_elements, answers)
     populate_multiple_choice_responses(answers)
+    $('div[name="question-ordinal-1"]').show()
 });
 
 function save_all_responses(new_url) {

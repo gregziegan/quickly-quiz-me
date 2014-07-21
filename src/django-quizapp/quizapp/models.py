@@ -53,6 +53,7 @@ class Question(models.Model):
 
     class Meta:
         ordering = ['ordinal']
+        unique_together = ('ordinal', 'quiz')
 
     def get_content_summary(self):
         content_words = self.content.split()
