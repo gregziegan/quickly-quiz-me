@@ -5,6 +5,7 @@ from django.contrib.auth import logout as auth_logout, login as auth_login
 from django.conf import settings
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponse
 from quizapp.forms import QuizForm, QuestionForm, QuizSessionForm
 from quizapp.models import *
@@ -66,7 +67,7 @@ def choose_app(request, template_name='choose_app.html'):
 
 @login_required
 def quiz_dashboard(request, template_name='quiz/dashboard.html'):
-    quiz_sessions = QuizSession.objects.filter(ended_at=None, is_private=False)
+    quiz_sessions = QuizSession.objects.filter(Q(ended_at=None) & (Q(is_private=False) | Q(created_by=request.user)))
     return render(request, template_name, {'quiz_sessions': quiz_sessions})
 
 @login_required
