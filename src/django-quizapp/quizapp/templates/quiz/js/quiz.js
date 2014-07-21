@@ -134,6 +134,10 @@ function save_all_responses(new_url) {
     }
 }
 
+function submit_quiz() {
+    $('#submit-quiz').trigger('click')
+}
+
 function next_question(question_ordinal) {
     var new_question_ordinal = parseInt(question_ordinal) + 1
     $('#question-' + question_ordinal).hide()

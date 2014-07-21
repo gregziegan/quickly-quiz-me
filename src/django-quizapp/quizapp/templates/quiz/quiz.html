@@ -18,11 +18,15 @@
         <div class="list-group">
           {% for question in quiz_questions %}
           <a class="list-group-item" id="question-nav-{{ question.id }}" onclick="show_question({{ question.id }})"><strong>{{ question.get_content_summary }}</strong></a>
-          {% endfor %} 
+          {% endfor %}
+            <a href="#" onclick="submit_quiz()" class="list-group-item list-group-item-success">Submit Quiz for Grading!</a>
         </div>
       </div>
     </div>
   </div>
+          <form role="form" method="post" action="{% url 'quiz' session.id %}">{% csrf_token %}
+            <button id="submit-quiz" class="hidden" type="submit">submit quiz</button>
+          </form>
   <div class="row">
       <a href="{% url 'quiz_dashboard' %}" class="btn btn-info btn-block">Back Home</a>
   </div>
@@ -38,7 +42,7 @@
       <br>
       {% for question in quiz_questions %}
       <br>
-        <p>{{ question.ordinal }}. {{ question.content }}</p>
+        <p>{{ question.ordinal }}. {{ question.content|linebreaks }}</p>
       <br>
       {% endfor %}
     </div>

@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from quizapp.forms import QuizForm, QuestionForm, QuizSessionForm
 from quizapp.models import *
+from quizapp.utils import grade_quiz
 import json
 import logging
 logger = logging.getLogger(__name__)
@@ -105,6 +106,12 @@ def quiz(request, session_id, template_name='quiz/quiz.html'):
             answer_json = json.dumps({ 'answer_id': answer.id, 'answer_content': answer.essay_answer })
             return HttpResponse(answer_json, content_type="application/json")
 
+        else:
+            player_answers = PlayerAnswer.objects.filter(session=quiz_session, player=request.user)
+            grade = grade_quiz(player_answers)
+            score = Score.objects.create(score=grade, session=quiz_session, player=request.user)
+            return redirect(reverse('quizapp.views.view_score', args=(score.id,)))
+
     answer_vals = PlayerAnswer.objects.filter(session=quiz_session, player=request.user).values('question', 'essay_answer', 'multiple_choice_answer')
     answers = { int(answer['question']): {'essay':answer['essay_answer'],'mult_choice':answer['multiple_choice_answer']}  for answer in answer_vals }
     answers = json.dumps(answers)
@@ -113,8 +120,14 @@ def quiz(request, session_id, template_name='quiz/quiz.html'):
         {'quiz_questions': quiz_questions,
          'quiz': quiz,
          'question_ids':question_ids,
-         'answers': answers}
+         'answers': answers,
+         'session': quiz_session}
     )
+
+@login_required
+def view_score(request, score_id, template_name='quiz/view_score.html'):
+    score = get_object_or_404(Score, pk=score_id)
+    return render(request, template_name, {'score':score})
 
 
 #################################  Management Views  #################################
@@ -130,27 +143,23 @@ def manage_dashboard(request, template_name='../ajax/dashboard.html'):
 @permission_required('user.is_staff')
 def edit_quiz(request, quiz_id=None, template_name='manage/edit_quiz.html'):
 
-    try:
-        quiz = get_object_or_404(Quiz, id=quiz_id) if quiz_id else None
+    quiz = get_object_or_404(Quiz, id=quiz_id) if quiz_id else None
 
-        if quiz:
-            form = QuizForm(instance=quiz)
+    if quiz:
+        form = QuizForm(instance=quiz)
+    else:
+        form = QuizForm()
+
+    if request.method == 'POST' and request.is_ajax():
+        logger.info(request.POST)
+        form = QuizForm(request.POST, instance=quiz) if quiz else QuizForm(request.POST)
+        if form.is_valid():
+            q = form.save()
+            return HttpResponse(json.dumps({'quiz_id': q.id}), content_type='application/json')
         else:
-            form = QuizForm()
+            return HttpResponse(json.dumps({'message': 'error'}), content_type='application/json')
 
-        if request.method == 'POST' and request.is_ajax():
-            logger.info(request.POST)
-            form = QuizForm(request.POST, instance=quiz) if quiz else QuizForm(request.POST)
-            if form.is_valid():
-                q = form.save()
-                return HttpResponse(json.dumps({'quiz_id': q.id}), content_type='application/json')
-            else:
-                return HttpResponse(json.dumps({'message': 'error'}), content_type='application/json')
-
-        return render(request, template_name, {'quiz':quiz, 'form':form})
-    except:
-        import sys, traceback
-        traceback.print_exc(file=sys.stdout)
+    return render(request, template_name, {'quiz':quiz, 'form':form})
 
 @permission_required('user.is_staff')
 def add_questions(request, quiz_id, template_name='manage/add_questions.html'):

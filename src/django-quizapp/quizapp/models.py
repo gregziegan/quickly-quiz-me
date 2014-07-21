@@ -93,5 +93,12 @@ class PlayerAnswer(models.Model):
             self.essay_answer = answer
 
     def __unicode__(self):
-        return '<Answer: <Player: {}> {}>'.format(self.player, self.question)
+        return u'<Answer: <Player: {}> {}>'.format(self.player, self.question)
 
+class Score(models.Model):
+    score = models.DecimalField(max_digits=5, decimal_places=2)
+    session = models.ForeignKey(QuizSession)
+    player = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return u'<Score {} -- Player {}>'.format(self.score, self.player)
