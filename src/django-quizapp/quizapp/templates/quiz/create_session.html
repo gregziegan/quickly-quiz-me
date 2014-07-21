@@ -1,6 +1,11 @@
 {% extends 'quiz/base.html' %}
 
 {% block content %}
+
+<div class="page-header">
+  <h2>Quickly Quiz Me!<br><small>Create a multiplayer quiz session!</small></h2>
+</div>
+
 <form action="{% url 'create_session' %}" method="post">{% csrf_token %}
   <div class="col-md-6 col-md-offset-3 col-sm-10">
     {{ form.as_p }}
