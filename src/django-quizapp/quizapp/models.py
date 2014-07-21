@@ -38,7 +38,7 @@ class QuizSession(models.Model):
     is_private = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
 
     def __unicode__(self):
         return self.name

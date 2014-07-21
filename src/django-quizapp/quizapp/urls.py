@@ -20,6 +20,7 @@ quiz_patterns = patterns('quizapp.views',
     url(r'^quiz-session/(\d+)/auto-save/$', 'quiz'),
     url(r'^create-quiz-session/$', 'create_session', name="create_session"),
     url(r'^view-score/(\d+)$', 'view_score', name="view_score"),
+    url(r'^wait-for-score$', 'wait_for_score', name="wait_for_score"),
 )
 
 urlpatterns = patterns(

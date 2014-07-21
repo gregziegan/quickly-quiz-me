@@ -109,6 +109,8 @@ def quiz(request, session_id, template_name='quiz/quiz.html'):
         else:
             player_answers = PlayerAnswer.objects.filter(session=quiz_session, player=request.user)
             grade = grade_quiz(player_answers)
+            if grade == None:
+                return redirect(reverse('quizapp.views.wait_for_score'))
             score = Score.objects.create(score=grade, session=quiz_session, player=request.user)
             return redirect(reverse('quizapp.views.view_score', args=(score.id,)))
 
@@ -129,6 +131,9 @@ def view_score(request, score_id, template_name='quiz/view_score.html'):
     score = get_object_or_404(Score, pk=score_id)
     return render(request, template_name, {'score':score})
 
+@login_required
+def wait_for_score(request, template_name='quiz/wait_for_score.html'):
+    return render(request, template_name, {})
 
 #################################  Management Views  #################################
 
