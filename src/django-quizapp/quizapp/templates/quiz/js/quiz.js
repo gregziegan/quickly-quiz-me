@@ -20,6 +20,7 @@ $(function() {
 
 function show_question(question_id) {
     hide_questions()
+    $('#question-nav-' + question_id).addClass('active')
     $('#question-' + question_id).show()
 }
 
@@ -27,7 +28,9 @@ function hide_questions() {
     var re = /id="question-\d+/g
     var questions = source.match(re)
     for (var i = 0; i < questions.length; i++) {
-        $('#question-' + /\d+/.exec(questions[i])).hide()
+        var question_id = /\d+/.exec(questions[i]);
+        $('#question-' + question_id).hide()
+        $('#question-nav-' + question_id).removeClass('active')
     }
 }
 
@@ -135,6 +138,6 @@ function submit_quiz() {
 
 function next_question(question_ordinal) {
     var new_question_ordinal = parseInt(question_ordinal) + 1
-    $('#question-' + question_ordinal).hide()
-    $('#question-' + new_question_ordinal).show()
+    hide_questions()
+    show_question(new_question_ordinal)
 }

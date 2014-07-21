@@ -7,7 +7,7 @@
     <h1>{{ quiz.name }}<br><small>{{ candidate }}</small></h1>
 </div>
 
-<div class="col-md-3">
+<div class="col-md-4">
   <div class="row">
     <div class="panel panel-info">
       <div class="panel-heading">
@@ -16,7 +16,7 @@
       <div class="panel-body">
         <div class="list-group">
           {% for question in quiz_questions %}
-          <a class="list-group-item" id="question-nav-{{ question.id }}" onclick="show_question({{ question.id }})"><strong>{{ question.get_content_summary }}</strong></a>
+          <a class="list-group-item {% if forloop.first %}active{% endif %}" id="question-nav-{{ question.id }}" onclick="show_question({{ question.id }})"><strong>{{ question.ordinal }}. {{ question.get_content_summary }}</strong></a>
           {% endfor %}
             <a href="#" onclick="submit_quiz()" class="list-group-item list-group-item-success">Submit Quiz for Grading!</a>
         </div>
@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<div class="col-md-9">
+<div class="col-md-8">
 {% for question, choices in quiz_questions.items %}
     <div id="question-{{ question.id }}" name="question-ordinal-{{ question.ordinal }}" class="panel panel-info" style="display: none">
       <div class="panel-heading">
