@@ -111,8 +111,10 @@ $(document).ready(function() {
     var answers = {{ answers|safe }}
     var re = /id="response-\d+/g
     var essay_elements = source.match(re)
-    populate_essay_responses(essay_elements, answers)
-    populate_multiple_choice_responses(answers)
+    if (answers.length > 0) {
+        populate_essay_responses(essay_elements, answers)
+        populate_multiple_choice_responses(answers)
+    }
     $('div[name="question-ordinal-1"]').show()
 });
 
